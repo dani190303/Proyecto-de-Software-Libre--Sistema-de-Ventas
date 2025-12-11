@@ -2,7 +2,7 @@ const db = require('../config/database');
 const obtenerUsuarios = async (req,res)=>{ 
     try{ 
  
-        const[usuarios] = await db.query('SELECT * from usuarios ORDER BY id DESC') 
+        const[usuarios] = await db.query('SELECT * from usuario') ;
         res.json({ 
             succes:true, 
             count: usuarios.length, 
