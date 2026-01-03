@@ -6,6 +6,7 @@ const obtenerProductos = async (req, res) => {
             SELECT p.*, c.nombre as categoria_nombre 
             FROM producto p 
             LEFT JOIN categoria c ON p.id_categoria = c.id_categoria 
+            WHERE p.estado = 1
             ORDER BY p.id_producto DESC
         `);
         res.json({
@@ -25,7 +26,7 @@ const obtenerProductos = async (req, res) => {
 const obtenerProductoPorId = async (req, res) => {
     try {
         const { id } = req.params;
-        const [producto] = await db.query('SELECT * FROM producto WHERE id_producto = ?', [id]);
+        const [producto] = await db.query('SELECT * FROM producto WHERE id_producto = ? AND estado = 1', [id]);
 
         if (producto.length === 0) {
             return res.status(404).json({
@@ -90,7 +91,7 @@ const actualizarProducto = async (req, res) => {
         const { id } = req.params;
         const { nombre, descripcion, precio, stock, estado, id_categoria } = req.body;
 
-        const [productoExistente] = await db.query('SELECT * FROM producto WHERE id_producto = ?', [id]);
+        const [productoExistente] = await db.query('SELECT * FROM producto WHERE id_producto = ? AND estado = 1', [id]);
         if (productoExistente.length === 0) {
             return res.status(404).json({
                 success: false,
@@ -129,7 +130,7 @@ const actualizarProducto = async (req, res) => {
 const eliminarProducto = async (req, res) => {
     try {
         const { id } = req.params;
-        const [productoExistente] = await db.query('SELECT * FROM producto WHERE id_producto = ?', [id]);
+        const [productoExistente] = await db.query('SELECT * FROM producto WHERE id_producto = ? AND estado = 1', [id]);
         if (productoExistente.length === 0) {
             return res.status(404).json({
                 success: false,
@@ -137,11 +138,12 @@ const eliminarProducto = async (req, res) => {
             });
         }
 
-        await db.query('DELETE FROM producto WHERE id_producto = ?', [id]);
+        // BORRADO LÓGICO
+        await db.query('UPDATE producto SET estado = 0 WHERE id_producto = ?', [id]);
 
         res.json({
             success: true,
-            mensaje: "Producto eliminado exitosamente",
+            mensaje: "Producto eliminado exitosamente (Lógico)",
         });
 
     } catch (error) {

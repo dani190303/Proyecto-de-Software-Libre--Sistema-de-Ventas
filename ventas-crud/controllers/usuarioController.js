@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const obtenerUsuarios = async (req, res) => {
     try {
-        const [usuarios] = await db.query('SELECT * FROM usuario ORDER BY id_usuario DESC');
+        const [usuarios] = await db.query('SELECT * FROM usuario WHERE estado = 1 ORDER BY id_usuario DESC');
         res.json({
             success: true,
             count: usuarios.length,
@@ -20,8 +20,8 @@ const obtenerUsuarios = async (req, res) => {
 const obtenerUsuarioPorId = async (req, res) => {
     try {
         const { id } = req.params;
-        const [usuario] = await db.query('SELECT * FROM usuario WHERE id_usuario = ?', [id]);
-        
+        const [usuario] = await db.query('SELECT * FROM usuario WHERE id_usuario = ? AND estado = 1', [id]);
+
         if (usuario.length === 0) {
             return res.status(404).json({
                 success: false,
@@ -44,7 +44,7 @@ const obtenerUsuarioPorId = async (req, res) => {
 const crearUsuario = async (req, res) => {
     try {
         const { nombres, apellidos, username, password, rol } = req.body;
-        
+
         if (!nombres || !apellidos || !username || !password || !rol) {
             return res.status(400).json({
                 success: false,
@@ -53,7 +53,7 @@ const crearUsuario = async (req, res) => {
         }
 
         const [resultado] = await db.query(
-            'INSERT INTO usuario (nombres, apellidos, username, password, rol) VALUES (?, ?, ?, ?, ?)',
+            'INSERT INTO usuario (nombres, apellidos, username, password, rol, estado) VALUES (?, ?, ?, ?, ?, 1)',
             [nombres, apellidos, username, password, rol]
         );
 
@@ -65,7 +65,8 @@ const crearUsuario = async (req, res) => {
                 nombres,
                 apellidos,
                 username,
-                rol
+                rol,
+                estado: 1
             }
         });
 
@@ -82,15 +83,15 @@ const actualizarUsuario = async (req, res) => {
     try {
         const { id } = req.params;
         const { nombres, apellidos, username, password, rol } = req.body;
-        
-        const [usuarioExistente] = await db.query('SELECT * FROM usuario WHERE id_usuario = ?', [id]);
+
+        const [usuarioExistente] = await db.query('SELECT * FROM usuario WHERE id_usuario = ? AND estado = 1', [id]);
         if (usuarioExistente.length === 0) {
             return res.status(404).json({
                 success: false,
                 mensaje: "Usuario no encontrado"
             });
         }
-        
+
         await db.query(
             'UPDATE usuario SET nombres=?, apellidos=?, username=?, password=?, rol=? WHERE id_usuario=?',
             [nombres, apellidos, username, password, rol, id]
@@ -119,20 +120,21 @@ const actualizarUsuario = async (req, res) => {
 
 const eliminarUsuario = async (req, res) => {
     try {
-        const { id } = req.params;        
-        const [usuarioExistente] = await db.query('SELECT * FROM usuario WHERE id_usuario = ?', [id]);
+        const { id } = req.params;
+        const [usuarioExistente] = await db.query('SELECT * FROM usuario WHERE id_usuario = ? AND estado = 1', [id]);
         if (usuarioExistente.length === 0) {
             return res.status(404).json({
                 success: false,
                 mensaje: "Usuario no encontrado"
             });
         }
-        
-        await db.query('DELETE FROM usuario WHERE id_usuario = ?', [id]);
+
+        // BORRADO LÓGICO: Solo cambiamos estado a 0
+        await db.query('UPDATE usuario SET estado = 0 WHERE id_usuario = ?', [id]);
 
         res.json({
             success: true,
-            mensaje: "Usuario eliminado exitosamente",            
+            mensaje: "Usuario eliminado exitosamente (Lógico)",
         });
 
     } catch (error) {
