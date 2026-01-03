@@ -1,0 +1,34 @@
+<div>
+    <h2>Lista de Productos</h2>
+
+    <a routerLink="/productos/nuevo">Nuevo Producto</a>
+    <br><br>
+
+    <table border="1" cellpadding="5" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Categoría</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let prod of productos">
+                <td>{{ prod.id_producto }}</td>
+                <td>{{ prod.nombre }}</td>
+                <td>{{ prod.descripcion }}</td>
+                <td>{{ prod.precio | currency }}</td>
+                <td>{{ prod.stock }}</td>
+                <td>{{ prod.categoria_nombre }}</td>
+                <td>
+                    <a [routerLink]="['/productos/editar', prod.id_producto]">Editar</a>
+                    <button (click)="eliminarProducto(prod.id_producto)">Eliminar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

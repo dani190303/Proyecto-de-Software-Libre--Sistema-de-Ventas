@@ -1,0 +1,16 @@
+<div>
+    <h2>{{ editMode ? 'Editar Categoría' : 'Nueva Categoría' }}</h2>
+
+    <form (ngSubmit)="guardarCategoria()" #form="ngForm">
+        <div>
+            <label>Nombre:</label>
+            <input type="text" [(ngModel)]="categoria.nombre" name="nombre" required>
+        </div>
+        <br>
+
+        <div>
+            <button type="submit" [disabled]="!form.valid">Guardar</button>
+            <a routerLink="/categorias">Cancelar</a>
+        </div>
+    </form>
+</div>

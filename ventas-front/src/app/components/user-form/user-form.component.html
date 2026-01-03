@@ -1,0 +1,43 @@
+<div>
+    <h2>{{ editMode ? 'Editar Usuario' : 'Nuevo Usuario' }}</h2>
+
+    <form (ngSubmit)="guardarUsuario()" #form="ngForm">
+        <div>
+            <label>Nombres:</label>
+            <input type="text" [(ngModel)]="usuario.nombres" name="nombres" required>
+        </div>
+        <br>
+
+        <div>
+            <label>Apellidos:</label>
+            <input type="text" [(ngModel)]="usuario.apellidos" name="apellidos" required>
+        </div>
+        <br>
+
+        <div>
+            <label>Username:</label>
+            <input type="text" [(ngModel)]="usuario.username" name="username" required>
+        </div>
+        <br>
+
+        <div>
+            <label>Password:</label>
+            <input type="password" [(ngModel)]="usuario.password" name="password" [required]="!editMode">
+        </div>
+        <br>
+
+        <div>
+            <label>Rol:</label>
+            <select [(ngModel)]="usuario.rol" name="rol" required>
+                <option value="ADMIN">Administrador</option>
+                <option value="EMPLEADO">Empleado</option>
+            </select>
+        </div>
+        <br>
+
+        <div>
+            <button type="submit" [disabled]="!form.valid">Guardar</button>
+            <a routerLink="/usuarios">Cancelar</a>
+        </div>
+    </form>
+</div>

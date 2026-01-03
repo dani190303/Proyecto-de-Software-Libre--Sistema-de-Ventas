@@ -1,0 +1,45 @@
+<div>
+    <h2>{{ editMode ? 'Editar Producto' : 'Nuevo Producto' }}</h2>
+
+    <form (ngSubmit)="guardarProducto()" #form="ngForm">
+        <div>
+            <label>Nombre:</label>
+            <input type="text" [(ngModel)]="producto.nombre" name="nombre" required>
+        </div>
+        <br>
+
+        <div>
+            <label>Descripción:</label>
+            <textarea [(ngModel)]="producto.descripcion" name="descripcion"></textarea>
+        </div>
+        <br>
+
+        <div>
+            <label>Precio:</label>
+            <input type="number" [(ngModel)]="producto.precio" name="precio" required step="0.01">
+        </div>
+        <br>
+
+        <div>
+            <label>Stock:</label>
+            <input type="number" [(ngModel)]="producto.stock" name="stock" required>
+        </div>
+        <br>
+
+        <div>
+            <label>Categoría:</label>
+            <select [(ngModel)]="producto.id_categoria" name="id_categoria" required>
+                <option value="0" disabled>Seleccione una categoría</option>
+                <option *ngFor="let cat of categorias" [value]="cat.id_categoria">
+                    {{ cat.nombre }}
+                </option>
+            </select>
+        </div>
+        <br>
+
+        <div>
+            <button type="submit" [disabled]="!form.valid || producto.id_categoria == 0">Guardar</button>
+            <a routerLink="/productos">Cancelar</a>
+        </div>
+    </form>
+</div>
