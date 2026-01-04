@@ -6,6 +6,7 @@ import { ProductFormComponent } from './components/product-form/product-form.com
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { CategoryFormComponent } from './components/category-form/category-form.component';
 import { SaleProcessComponent } from './components/sale-process/sale-process.component';
+import { SaleListComponent } from './components/sale-list/sale-list.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
@@ -19,4 +20,5 @@ export const routes: Routes = [
     { path: 'categorias/nuevo', component: CategoryFormComponent },
     { path: 'categorias/editar/:id', component: CategoryFormComponent },
     { path: 'ventas', component: SaleProcessComponent },
+    { path: 'historial', component: SaleListComponent },
 ];

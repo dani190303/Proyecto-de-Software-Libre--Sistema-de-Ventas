@@ -1,0 +1,25 @@
+<div>
+    <h2>Historial de Ventas</h2>
+
+    <table border="1" cellpadding="5" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID Venta</th>
+                <th>Fecha</th>
+                <th>Vendedor</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let venta of ventas">
+                <td>{{ venta.id_venta }}</td>
+                <td>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ venta.nombres }} {{ venta.apellidos }} ({{ venta.username }})</td>
+                <td>{{ venta.total | currency:'PEN':'symbol':'1.2-2' }}</td>
+            </tr>
+            <tr *ngIf="ventas.length === 0">
+                <td colspan="4" align="center">No hay ventas registradas</td>
+            </tr>
+        </tbody>
+    </table>
+</div>

@@ -13,4 +13,8 @@ export class VentaService {
     createVenta(venta: Venta): Observable<any> {
         return this.http.post<any>(this.apiUrl, venta);
     }
+
+    getVentas(): Observable<any> {
+        return this.http.get<any>(this.apiUrl);
+    }
 }
