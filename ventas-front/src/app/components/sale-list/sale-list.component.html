@@ -6,6 +6,7 @@
             <tr>
                 <th>ID Venta</th>
                 <th>Fecha</th>
+                <th>Hora</th>
                 <th>Vendedor</th>
                 <th>Total</th>
                 <th>Acciones</th>
@@ -14,7 +15,8 @@
         <tbody>
             <tr *ngFor="let venta of ventas">
                 <td>{{ venta.id_venta }}</td>
-                <td>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ venta.fecha | date:'dd/MM/yyyy' }}</td>
+                <td>{{ venta.fecha | date:'HH:mm:ss' }}</td>
                 <td>{{ venta.nombres }} {{ venta.apellidos }} ({{ venta.username }})</td>
                 <td>{{ venta.total | currency:'PEN':'symbol':'1.2-2' }}</td>
                 <td>

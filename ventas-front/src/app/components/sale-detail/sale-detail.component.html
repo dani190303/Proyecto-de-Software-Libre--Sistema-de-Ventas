@@ -1,6 +1,9 @@
 <div *ngIf="venta">
     <h2>Detalle de Venta #{{ venta.id_venta }}</h2>
-    <p><strong>Fecha:</strong> {{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</p>
+    <p>
+        <strong>Fecha:</strong> {{ venta.fecha | date:'dd/MM/yyyy' }}<br>
+        <strong>Hora:</strong> {{ venta.fecha | date:'HH:mm:ss' }}
+    </p>
     <p><strong>Vendedor:</strong> {{ venta.nombres }} {{ venta.apellidos }} ({{ venta.username }})</p>
 
     <hr>
