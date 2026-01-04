@@ -8,6 +8,7 @@
                 <th>Fecha</th>
                 <th>Vendedor</th>
                 <th>Total</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -16,6 +17,9 @@
                 <td>{{ venta.fecha | date:'dd/MM/yyyy HH:mm' }}</td>
                 <td>{{ venta.nombres }} {{ venta.apellidos }} ({{ venta.username }})</td>
                 <td>{{ venta.total | currency:'PEN':'symbol':'1.2-2' }}</td>
+                <td>
+                    <a [routerLink]="['/historial', venta.id_venta]">Ver Detalle</a>
+                </td>
             </tr>
             <tr *ngIf="ventas.length === 0">
                 <td colspan="4" align="center">No hay ventas registradas</td>

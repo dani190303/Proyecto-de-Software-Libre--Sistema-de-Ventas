@@ -17,4 +17,8 @@ export class VentaService {
     getVentas(): Observable<any> {
         return this.http.get<any>(this.apiUrl);
     }
+
+    getVenta(id: number): Observable<any> {
+        return this.http.get<any>(`${this.apiUrl}/${id}`);
+    }
 }

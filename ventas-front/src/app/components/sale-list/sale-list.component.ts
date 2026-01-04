@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { VentaService } from '../../services/venta.service';
 
 @Component({
   selector: 'app-sale-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './sale-list.component.html',
   styleUrls: ['./sale-list.component.css']
 })
