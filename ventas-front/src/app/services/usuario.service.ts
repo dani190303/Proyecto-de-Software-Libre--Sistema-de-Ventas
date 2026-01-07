@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Usuario } from '../models/usuario.interface';
 
@@ -7,10 +7,9 @@ import { Usuario } from '../models/usuario.interface';
     providedIn: 'root'
 })
 export class UsuarioService {
-    private http = inject(HttpClient);
     private apiUrl = 'http://localhost:3000/api/usuarios';
 
-    constructor() { }
+    constructor(private http: HttpClient) { }
 
     getUsuarios(): Observable<any> {
         return this.http.get<any>(this.apiUrl);

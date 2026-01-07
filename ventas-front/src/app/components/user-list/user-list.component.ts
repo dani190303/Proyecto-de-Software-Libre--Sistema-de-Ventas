@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { UsuarioService } from '../../services/usuario.service';
@@ -12,7 +12,7 @@ import { Usuario } from '../../models/usuario.interface';
   styleUrls: ['./user-list.component.css']
 })
 export class UserListComponent implements OnInit {
-  usuarioService = inject(UsuarioService);
+  constructor(private usuarioService: UsuarioService) { }
   usuarios: Usuario[] = [];
 
   ngOnInit(): void {
