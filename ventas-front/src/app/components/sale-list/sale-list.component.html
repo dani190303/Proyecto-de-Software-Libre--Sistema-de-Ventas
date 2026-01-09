@@ -7,8 +7,12 @@
                 <th>ID Venta</th>
                 <th>Fecha</th>
                 <th>Hora</th>
+                <th>Cliente</th>
+                <th>Tipo</th>
+                <th>Modo</th>
                 <th>Vendedor</th>
-                <th>Total</th>
+                <th>Total USD</th>
+                <th>Total PEN</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -17,8 +21,19 @@
                 <td>{{ venta.id_venta }}</td>
                 <td>{{ venta.fecha | date:'dd/MM/yyyy' }}</td>
                 <td>{{ venta.fecha | date:'HH:mm:ss' }}</td>
+                <td>
+                    <span *ngIf="venta.cliente_nombres">
+                        {{ venta.cliente_nombres }} {{ venta.cliente_apellidos }}
+                    </span>
+                    <span *ngIf="!venta.cliente_nombres">
+                        -
+                    </span>
+                </td>
+                <td>{{ venta.tipo_comprobante || '-' }}</td>
+                <td> - </td>
                 <td>{{ venta.nombres }} {{ venta.apellidos }} ({{ venta.username }})</td>
-                <td>{{ venta.total | currency:'PEN':'symbol':'1.2-2' }}</td>
+                <td>{{ venta.total_usd | currency:'USD' }}</td>
+                <td>{{ venta.total_pen | currency:'PEN' }}</td>
                 <td>
                     <a [routerLink]="['/historial', venta.id_venta]">Ver Detalle</a>
                 </td>

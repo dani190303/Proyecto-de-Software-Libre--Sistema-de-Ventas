@@ -1,0 +1,22 @@
+<div>
+    <h2>{{ esEdicion ? 'Editar Cliente' : 'Nuevo Cliente' }}</h2>
+    <div style="max-width: 400px;">
+        <div style="margin-bottom: 10px;">
+            <label>Documento (DNI/RUC):</label>
+            <input type="text" [(ngModel)]="cliente.documento" style="width: 100%; padding: 5px;">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Nombres:</label>
+            <input type="text" [(ngModel)]="cliente.nombres" style="width: 100%; padding: 5px;">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Apellidos:</label>
+            <input type="text" [(ngModel)]="cliente.apellidos" style="width: 100%; padding: 5px;">
+        </div>
+        <div style="margin-top: 20px;">
+            <button (click)="guardarCliente()" style="padding: 10px 20px;">Guardar</button>
+            &nbsp;
+            <button routerLink="/clientes" style="padding: 10px 20px;">Cancelar</button>
+        </div>
+    </div>
+</div>

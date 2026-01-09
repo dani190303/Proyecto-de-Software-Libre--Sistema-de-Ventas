@@ -3,9 +3,11 @@ const db = require('../config/database');
 const obtenerVentas = async (req, res) => {
     try {
         const [ventas] = await db.query(`
-            SELECT v.*, u.username, u.nombres, u.apellidos 
+            SELECT v.*, u.username, u.nombres as usuario_nombres, u.apellidos as usuario_apellidos, 
+                   c.nombres as cliente_nombres, c.apellidos as cliente_apellidos, c.documento 
             FROM venta v 
             JOIN usuario u ON v.id_usuario = u.id_usuario 
+            LEFT JOIN cliente c ON v.id_cliente = c.id_cliente
             ORDER BY v.fecha DESC
         `);
         res.json({
@@ -27,9 +29,11 @@ const obtenerVentaPorId = async (req, res) => {
         const { id } = req.params;
 
         const [venta] = await db.query(`
-            SELECT v.*, u.username, u.nombres, u.apellidos 
+            SELECT v.*, u.username, u.nombres as usuario_nombres, u.apellidos as usuario_apellidos, 
+                   c.nombres as cliente_nombres, c.apellidos as cliente_apellidos, c.documento 
             FROM venta v 
             JOIN usuario u ON v.id_usuario = u.id_usuario 
+            LEFT JOIN cliente c ON v.id_cliente = c.id_cliente
             WHERE v.id_venta = ?
         `, [id]);
 
@@ -70,17 +74,17 @@ const crearVenta = async (req, res) => {
         connection = await db.getConnection();
         await connection.beginTransaction();
 
-        const { id_usuario, detalles } = req.body;
+        const { id_usuario, detalles, id_cliente, tipo_comprobante, tipo_cambio } = req.body;
 
-        if (!id_usuario || !detalles || detalles.length === 0) {
+        if (!id_usuario || !detalles || detalles.length === 0 || !tipo_cambio) {
             return res.status(400).json({
                 success: false,
-                mensaje: "Faltan datos requeridos (usuario o detalles)"
+                mensaje: "Faltan datos requeridos (usuario, detalles, tipo_cambio)"
             });
         }
 
         // 1. Calcular el Total y preparar los detalles verificando precios y stock
-        let totalCalculado = 0;
+        let totalUSD = 0;
         const detallesParaInsertar = [];
 
         for (const item of detalles) {
@@ -100,21 +104,30 @@ const crearVenta = async (req, res) => {
                 throw new Error(`Stock insuficiente para el producto "${nombre}". Disponible: ${stock}`);
             }
 
-            const subtotal = precio * item.cantidad;
-            totalCalculado += subtotal;
+            // El precio de la BD se asume en DOLARES según requerimiento ("el total( es en dolares)")
+            // Aplicar descuento porcentual si existe
+            const descuentoPorcentaje = item.descuento || 0;
+            const precioConDescuento = precio * (1 - (descuentoPorcentaje / 100));
+
+            const subtotal = precioConDescuento * item.cantidad;
+            totalUSD += subtotal;
 
             detallesParaInsertar.push({
                 id_producto: item.id_producto,
                 cantidad: item.cantidad,
-                precio_unitario: precio,
-                subtotal: subtotal
+                precio_unitario: precio, // Precio base
+                descuento: descuentoPorcentaje,
+                subtotal: subtotal // Subtotal real cobrado
             });
         }
 
+        const totalPEN = totalUSD * tipo_cambio;
+
         // 2. Insertar Venta (Cabecera)
         const [ventaResult] = await connection.query(
-            'INSERT INTO venta (id_usuario, total) VALUES (?, ?)',
-            [id_usuario, totalCalculado]
+            `INSERT INTO venta (id_usuario, total, total_usd, total_pen, tipo_cambio, id_cliente, tipo_comprobante) 
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [id_usuario, totalUSD, totalUSD, totalPEN, tipo_cambio, id_cliente || null, tipo_comprobante || 'BOLETA']
         );
         const id_venta = ventaResult.insertId;
 
@@ -122,9 +135,9 @@ const crearVenta = async (req, res) => {
         for (const detalle of detallesParaInsertar) {
             // Insertar detalle con el precio histórico (el del momento de la venta)
             await connection.query(
-                `INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario, subtotal) 
-                 VALUES (?, ?, ?, ?, ?)`,
-                [id_venta, detalle.id_producto, detalle.cantidad, detalle.precio_unitario, detalle.subtotal]
+                `INSERT INTO detalle_venta (id_venta, id_producto, cantidad, precio_unitario, descuento, subtotal) 
+                 VALUES (?, ?, ?, ?, ?, ?)`,
+                [id_venta, detalle.id_producto, detalle.cantidad, detalle.precio_unitario, detalle.descuento, detalle.subtotal]
             );
 
             // Actualizar stock del producto
@@ -142,7 +155,9 @@ const crearVenta = async (req, res) => {
             data: {
                 id_venta,
                 id_usuario,
-                total: totalCalculado,
+                total: totalUSD,
+                total_usd: totalUSD,
+                total_pen: totalPEN,
                 items_count: detallesParaInsertar.length
             }
         });

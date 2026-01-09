@@ -1,0 +1,34 @@
+<div>
+    <h2>Gestión de Clientes</h2>
+    <button routerLink="/clientes/nuevo" style="margin-bottom: 20px;">
+        Nuevo Cliente
+    </button>
+    <table border="1" cellpadding="5" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Documento</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cliente of clientes">
+                <td>{{ cliente.id_cliente }}</td>
+                <td>{{ cliente.documento }}</td>
+                <td>{{ cliente.nombres }}</td>
+                <td>{{ cliente.apellidos }}</td>
+                <td>
+                    <button [routerLink]="['/clientes/editar', cliente.id_cliente]"
+                        style="margin-right: 5px;">Editar</button>
+                    <button (click)="eliminarCliente(cliente.id_cliente)"
+                        style="color: white; background-color: red; border: none; padding: 5px 10px; cursor: pointer;">Eliminar</button>
+                </td>
+            </tr>
+            <tr *ngIf="clientes.length === 0">
+                <td colspan="5" align="center">No hay clientes registrados</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
