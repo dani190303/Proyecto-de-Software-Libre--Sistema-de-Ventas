@@ -11,8 +11,11 @@ import { SaleDetailComponent } from './components/sale-detail/sale-detail.compon
 import { ClientListComponent } from './components/client-list/client-list.component';
 import { ClientFormComponent } from './components/client-form/client-form.component';
 
+import { LoginComponent } from './components/login/login.component';
+
 export const routes: Routes = [
-    { path: '', redirectTo: 'usuarios', pathMatch: 'full' },
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    { path: 'login', component: LoginComponent },
     { path: 'usuarios', component: UserListComponent },
     { path: 'usuarios/nuevo', component: UserFormComponent },
     { path: 'usuarios/editar/:id', component: UserFormComponent },

@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const obtenerClientes = async (req, res) => {
     try {
-        const [clientes] = await db.query('SELECT * FROM cliente WHERE estado = 1 ORDER BY nombres ASC');
+        const [clientes] = await db.query('SELECT * FROM cliente WHERE estado = 1 ORDER BY id_cliente ASC');
         res.json({
             success: true,
             data: clientes

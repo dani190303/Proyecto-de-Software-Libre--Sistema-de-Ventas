@@ -44,7 +44,7 @@ export class PdfService {
 
         // Texto de la Empresa (Derecha)
         doc.setFontSize(14);
-        doc.text('BOLETA DE VENTA', pageWidth - 15, 15, { align: 'right' });
+        doc.text('COTIZACIÓN', pageWidth - 15, 15, { align: 'right' });
         doc.setFontSize(10);
         doc.text(`RUC: ${empresa.ruc}`, pageWidth - 15, 22, { align: 'right' });
         doc.setFontSize(9);

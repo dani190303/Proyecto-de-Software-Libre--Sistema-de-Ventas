@@ -1,6 +1,6 @@
 <div>
     <h2>Registrar Nueva Venta</h2>
-    <p><strong>Vendedor:</strong> Usuario ID {{ userId }}</p>
+    <p><strong>Vendedor:</strong> {{ userName }}</p>
 
     <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 20px;">
         <h3>Datos de Comprobante</h3>
@@ -11,12 +11,7 @@
                 {{ c.nombres }} {{ c.apellidos }} ({{ c.documento }})
             </option>
         </select>
-        &nbsp;
-        <label>Tipo:</label>
-        <select [(ngModel)]="tipoComprobante">
-            <option value="FACTURA">FACTURA</option>
-            <option value="BOLETA">BOLETA</option>
-        </select>
+
         &nbsp;
         <label>T. Cambio (PEN):</label>
         <input type="number" [(ngModel)]="tipoCambio" step="0.01" style="width: 70px;">

@@ -2,7 +2,7 @@ const db = require('../config/database');
 
 const obtenerUsuarios = async (req, res) => {
     try {
-        const [usuarios] = await db.query('SELECT * FROM usuario WHERE estado = 1 ORDER BY id_usuario DESC');
+        const [usuarios] = await db.query('SELECT * FROM usuario WHERE estado = 1 ORDER BY id_usuario ASC');
         res.json({
             success: true,
             count: usuarios.length,
@@ -146,10 +146,66 @@ const eliminarUsuario = async (req, res) => {
     }
 };
 
+const login = async (req, res) => {
+    try {
+        console.log("Intento de login:", req.body); // DEBUG
+        const { username, password } = req.body;
+
+        if (!username || !password) {
+            return res.status(400).json({
+                success: false,
+                mensaje: "Usuario y contraseña son obligatorios"
+            });
+        }
+
+        const [usuario] = await db.query('SELECT * FROM usuario WHERE username = ? AND estado = 1', [username]);
+        console.log("Usuario encontrado en DB:", usuario); // DEBUG
+
+        if (usuario.length === 0) {
+            return res.status(401).json({
+                success: false,
+                mensaje: "Credenciales inválidas (Usuario no existe)"
+            });
+        }
+
+        // Comparación simple de texto plano como solicitado
+        if (password !== usuario[0].password) {
+            console.log("Password incorrecto. Recibido:", password, "Esperado:", usuario[0].password); // DEBUG
+            return res.status(401).json({
+                success: false,
+                mensaje: "Credenciales inválidas (Password incorrecto)"
+            });
+        }
+
+        // Login exitoso
+        console.log("Login exitoso para:", username); // DEBUG
+        res.json({
+            success: true,
+            mensaje: "Login exitoso",
+            data: {
+                id_usuario: usuario[0].id_usuario,
+                nombres: usuario[0].nombres,
+                apellidos: usuario[0].apellidos,
+                username: usuario[0].username,
+                rol: usuario[0].rol
+            }
+        });
+
+    } catch (error) {
+        console.error("Error en login:", error); // DEBUG
+        res.status(500).json({
+            success: false,
+            mensaje: "Error en el login",
+            error: error.message
+        });
+    }
+};
+
 module.exports = {
     obtenerUsuarios,
     obtenerUsuarioPorId,
     crearUsuario,
     actualizarUsuario,
-    eliminarUsuario
+    eliminarUsuario,
+    login
 };

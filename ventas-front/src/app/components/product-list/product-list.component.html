@@ -1,10 +1,9 @@
 <div>
     <h2>Lista de Productos</h2>
-
-    <a routerLink="/productos/nuevo">Nuevo Producto</a>
-    <br><br>
-
-    <table border="1" cellpadding="5" cellspacing="0">
+    <button routerLink="/productos/nuevo" style="margin-bottom: 20px;">
+        Nuevo Producto
+    </button>
+    <table border="1" cellpadding="5" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -21,13 +20,18 @@
                 <td>{{ prod.id_producto }}</td>
                 <td>{{ prod.nombre }}</td>
                 <td>{{ prod.descripcion }}</td>
-                <td>{{ prod.precio | currency }}</td>
+                <td>{{ prod.precio | currency:'USD' }}</td>
                 <td>{{ prod.stock }}</td>
                 <td>{{ prod.categoria_nombre }}</td>
                 <td>
-                    <a [routerLink]="['/productos/editar', prod.id_producto]">Editar</a>
-                    <button (click)="eliminarProducto(prod.id_producto)">Eliminar</button>
+                    <button [routerLink]="['/productos/editar', prod.id_producto]"
+                        style="margin-right: 5px;">Editar</button>
+                    <button (click)="eliminarProducto(prod.id_producto)"
+                        style="color: white; background-color: red; border: none; padding: 5px 10px; cursor: pointer;">Eliminar</button>
                 </td>
+            </tr>
+            <tr *ngIf="productos.length === 0">
+                <td colspan="7" align="center">No hay productos registrados</td>
             </tr>
         </tbody>
     </table>

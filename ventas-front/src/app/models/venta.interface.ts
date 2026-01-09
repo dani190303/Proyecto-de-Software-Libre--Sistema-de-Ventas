@@ -20,7 +20,7 @@ export interface Venta {
 
     detalles: DetalleVenta[];
     id_cliente?: number | null;
-    tipo_comprobante?: 'BOLETA' | 'FACTURA';
+    tipo_comprobante?: 'BOLETA' | 'FACTURA' | 'COTIZACION';
 
     // Campos para visualización
     cliente_nombres?: string;

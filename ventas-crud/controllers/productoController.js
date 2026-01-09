@@ -7,7 +7,7 @@ const obtenerProductos = async (req, res) => {
             FROM producto p 
             LEFT JOIN categoria c ON p.id_categoria = c.id_categoria 
             WHERE p.estado = 1
-            ORDER BY p.id_producto DESC
+            ORDER BY p.id_producto ASC
         `);
         res.json({
             success: true,

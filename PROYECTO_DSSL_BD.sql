@@ -57,7 +57,7 @@ CREATE TABLE venta (
     total_usd DECIMAL(10,2) NOT NULL,
     total_pen DECIMAL(10,2) NOT NULL,
 
-    tipo_comprobante ENUM('BOLETA', 'FACTURA') NOT NULL,
+    tipo_comprobante ENUM('BOLETA', 'FACTURA', 'COTIZACION') NOT NULL,
 
     id_usuario INT NOT NULL,
     id_cliente INT NULL,

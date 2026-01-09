@@ -1,10 +1,9 @@
 <div>
     <h2>Lista de Categorías</h2>
-
-    <a routerLink="/categorias/nuevo">Nueva Categoría</a>
-    <br><br>
-
-    <table border="1" cellpadding="5" cellspacing="0">
+    <button routerLink="/categorias/nuevo" style="margin-bottom: 20px;">
+        Nueva Categoría
+    </button>
+    <table border="1" cellpadding="5" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -17,9 +16,14 @@
                 <td>{{ cat.id_categoria }}</td>
                 <td>{{ cat.nombre }}</td>
                 <td>
-                    <a [routerLink]="['/categorias/editar', cat.id_categoria]">Editar</a>
-                    <button (click)="eliminarCategoria(cat.id_categoria)">Eliminar</button>
+                    <button [routerLink]="['/categorias/editar', cat.id_categoria]"
+                        style="margin-right: 5px;">Editar</button>
+                    <button (click)="eliminarCategoria(cat.id_categoria)"
+                        style="color: white; background-color: red; border: none; padding: 5px 10px; cursor: pointer;">Eliminar</button>
                 </td>
+            </tr>
+            <tr *ngIf="categorias.length === 0">
+                <td colspan="3" align="center">No hay categorías registradas</td>
             </tr>
         </tbody>
     </table>

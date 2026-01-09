@@ -8,7 +8,7 @@ const obtenerVentas = async (req, res) => {
             FROM venta v 
             JOIN usuario u ON v.id_usuario = u.id_usuario 
             LEFT JOIN cliente c ON v.id_cliente = c.id_cliente
-            ORDER BY v.fecha DESC
+            ORDER BY v.id_venta ASC
         `);
         res.json({
             success: true,

@@ -1,10 +1,9 @@
 <div>
     <h2>Lista de Usuarios</h2>
-
-    <a routerLink="/usuarios/nuevo">Nuevo Usuario</a>
-    <br><br>
-
-    <table border="1" cellpadding="5" cellspacing="0">
+    <button routerLink="/usuarios/nuevo" style="margin-bottom: 20px;">
+        Nuevo Usuario
+    </button>
+    <table border="1" cellpadding="5" cellspacing="0" width="100%">
         <thead>
             <tr>
                 <th>ID</th>
@@ -21,9 +20,14 @@
                 <td>{{ user.nombres }} {{ user.apellidos }}</td>
                 <td>{{ user.rol }}</td>
                 <td>
-                    <a [routerLink]="['/usuarios/editar', user.id_usuario]">Editar</a>
-                    <button (click)="eliminarUsuario(user.id_usuario)">Eliminar</button>
+                    <button [routerLink]="['/usuarios/editar', user.id_usuario]"
+                        style="margin-right: 5px;">Editar</button>
+                    <button (click)="eliminarUsuario(user.id_usuario)"
+                        style="color: white; background-color: red; border: none; padding: 5px 10px; cursor: pointer;">Eliminar</button>
                 </td>
+            </tr>
+            <tr *ngIf="usuarios.length === 0">
+                <td colspan="5" align="center">No hay usuarios registrados</td>
             </tr>
         </tbody>
     </table>

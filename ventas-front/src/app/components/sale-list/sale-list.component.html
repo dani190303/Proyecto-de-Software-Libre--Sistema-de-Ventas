@@ -9,7 +9,6 @@
                 <th>Hora</th>
                 <th>Cliente</th>
                 <th>Tipo</th>
-                <th>Modo</th>
                 <th>Vendedor</th>
                 <th>Total USD</th>
                 <th>Total PEN</th>
@@ -29,17 +28,16 @@
                         -
                     </span>
                 </td>
-                <td>{{ venta.tipo_comprobante || '-' }}</td>
-                <td> - </td>
+                <td>{{ venta.tipo_comprobante || 'COTIZACION' }}</td>
                 <td>{{ venta.nombres }} {{ venta.apellidos }} ({{ venta.username }})</td>
                 <td>{{ venta.total_usd | currency:'USD' }}</td>
                 <td>{{ venta.total_pen | currency:'PEN' }}</td>
                 <td>
-                    <a [routerLink]="['/historial', venta.id_venta]">Ver Detalle</a>
+                    <button [routerLink]="['/historial', venta.id_venta]">Ver Detalle</button>
                 </td>
             </tr>
             <tr *ngIf="ventas.length === 0">
-                <td colspan="4" align="center">No hay ventas registradas</td>
+                <td colspan="9" align="center">No hay ventas registradas</td>
             </tr>
         </tbody>
     </table>

@@ -9,6 +9,8 @@ import { Producto } from '../../models/producto.interface';
 import { Venta, DetalleVenta } from '../../models/venta.interface';
 import { Cliente } from '../../models/cliente.interface';
 
+import { AuthService } from '../../services/auth.service';
+
 @Component({
   selector: 'app-sale-process',
   standalone: true,
@@ -20,6 +22,7 @@ export class SaleProcessComponent implements OnInit {
   productoService = inject(ProductoService);
   ventaService = inject(VentaService);
   clienteService = inject(ClienteService);
+  authService = inject(AuthService);
   router = inject(Router);
 
   productos: Producto[] = [];
@@ -28,7 +31,7 @@ export class SaleProcessComponent implements OnInit {
 
   // Datos Venta
   clienteSeleccionadoId: number | null = null;
-  tipoComprobante: 'BOLETA' | 'FACTURA' = 'FACTURA';
+  tipoComprobante: 'BOLETA' | 'FACTURA' | 'COTIZACION' = 'COTIZACION';
   tipoCambio: number = 3.75; // Valor por defecto, editable
 
   // Formulario agregar
@@ -36,10 +39,18 @@ export class SaleProcessComponent implements OnInit {
   cantidad: number = 1;
   descuento: number = 0; // Porcentaje
 
-  // Usuario Harcodeado
-  userId = 2; // Dani
+  userId: number = 0;
+  userName: string = '';
 
   ngOnInit(): void {
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    this.userId = user.id_usuario;
+    this.userName = `${user.nombres} ${user.apellidos}`;
+
     this.cargarProductos();
     this.cargarClientes();
   }
@@ -49,13 +60,8 @@ export class SaleProcessComponent implements OnInit {
       next: (res) => {
         if (res.success) {
           this.clientes = res.data;
-          // Seleccionar por defecto "Publico General" (Documento 00000000) si existe
-          const general = this.clientes.find(c => c.documento === '00000000');
-          if (general) {
-            this.clienteSeleccionadoId = general.id_cliente;
-          } else if (this.clientes.length > 0) {
-            this.clienteSeleccionadoId = this.clientes[0].id_cliente;
-          }
+          // Ya no seleccionamos por defecto para obligar a usar el "-- Seleccione --"
+          // this.clienteSeleccionadoId = ...
         }
       },
       error: (err) => console.error(err)
