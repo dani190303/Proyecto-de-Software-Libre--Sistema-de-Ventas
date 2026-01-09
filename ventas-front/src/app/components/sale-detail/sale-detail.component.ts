@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { VentaService } from '../../services/venta.service';
+import { PdfService } from '../../services/pdf.service';
 
 @Component({
   selector: 'app-sale-detail',
@@ -12,6 +13,7 @@ import { VentaService } from '../../services/venta.service';
 })
 export class SaleDetailComponent implements OnInit {
   ventaService = inject(VentaService);
+  pdfService = inject(PdfService); // Inyectar servicio PDF
   route = inject(ActivatedRoute);
 
   venta: any = null;
@@ -30,5 +32,11 @@ export class SaleDetailComponent implements OnInit {
       },
       error: (err) => console.error(err)
     });
+  }
+
+  imprimirBoleta() {
+    if (this.venta) {
+      this.pdfService.generateBoleta(this.venta);
+    }
   }
 }
